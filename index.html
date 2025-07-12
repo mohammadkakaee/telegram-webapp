@@ -33,14 +33,14 @@
 
     #marker {
       position: absolute;
-      bottom: -10px;
+      top: -20px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-top: 20px solid #000;
+      border-bottom: 20px solid #000;
       z-index: 10;
     }
 
@@ -128,7 +128,7 @@
       spinBtn.disabled = true;
 
       const finalDeg = rotation % 360;
-      const adjustedDeg = (360 - finalDeg + 90) % 360; // adjust for bottom marker
+      const adjustedDeg = (360 - finalDeg + 270) % 360; // adjust for top marker
       const index = Math.floor(adjustedDeg / sliceDeg) % rewards.length;
 
       resultDiv.textContent = `🎉 You won: ${rewards[index]}!`;
