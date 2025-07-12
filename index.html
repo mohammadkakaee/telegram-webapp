@@ -56,9 +56,15 @@
     const rewards = ["Try Again", "1,000💸", "Free Spin", "5,000💸", "Nothing", "10,000💸", "20,000💸", "BONUS! 💥"];
     const colors = ["#f94144", "#f3722c", "#f9844a", "#f9c74f", "#90be6d", "#43aa8b", "#577590", "#277da1"];
     const sliceDeg = 360 / rewards.length;
+
     let angle = 0;
+    let rotation = 0;
+    let spinning = false;
+    let canSpin = true;
+    let spinInterval;
 
     function drawWheel() {
+      angle = 0;
       for (let i = 0; i < rewards.length; i++) {
         ctx.beginPath();
         ctx.fillStyle = colors[i];
@@ -77,23 +83,37 @@
       }
     }
 
-    function spinWheel() {
-      const randomSpin = Math.floor(5000 + Math.random() * 3000);
-      let rotation = 0;
-      const spinInterval = setInterval(() => {
-        rotation += 20;
-        canvas.style.transform = `rotate(${rotation}deg)`;
-        if (rotation >= randomSpin) {
-          clearInterval(spinInterval);
-          const finalDeg = rotation % 360;
-          const index = Math.floor((360 - finalDeg) / sliceDeg) % rewards.length;
-          resultDiv.textContent = `🎉 You won: ${rewards[index]}!`;
-        }
-      }, 20);
+    function updateRotation() {
+      rotation = (rotation + 10) % 360;
+      canvas.style.transform = `rotate(${rotation}deg)`;
     }
 
+    function startSpin() {
+      if (!canSpin) return;
+      spinning = true;
+      spinBtn.textContent = "🛑 Stop";
+      spinInterval = setInterval(updateRotation, 20);
+    }
+
+    function stopSpin() {
+      clearInterval(spinInterval);
+      spinning = false;
+      canSpin = false;
+      spinBtn.disabled = true;
+      const finalDeg = rotation % 360;
+      const index = Math.floor((360 - finalDeg) / sliceDeg) % rewards.length;
+      resultDiv.textContent = `🎉 You won: ${rewards[index]}!`;
+    }
+
+    spinBtn.addEventListener('click', () => {
+      if (!spinning) {
+        startSpin();
+      } else {
+        stopSpin();
+      }
+    });
+
     drawWheel();
-    spinBtn.addEventListener('click', spinWheel);
   </script>
 </body>
 </html>
