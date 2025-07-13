@@ -23,7 +23,7 @@
     }
 
     canvas {
-      background: #fff;
+      background: transparent;
       border-radius: 50%;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       position: absolute;
@@ -89,21 +89,16 @@
     let spinInterval;
 
     function generateColors(count) {
-  const baseColors = [
-    "#f94144", "#f3722c", "#f9844a", "#f9c74f",
-    "#90be6d", "#43aa8b", "#577590", "#277da1",
-    "#9b5de5", "#f15bb5", "#fee440", "#00bbf9"
-  ];
-  const shuffled = baseColors.sort(() => 0.5 - Math.random());
-  const generated = [];
-  for (let i = 0; i < count; i++) {
-    generated.push(shuffled[i % shuffled.length]);
-  }
-  return generated;
-}
-  const shuffled = baseColors.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
-}
+      const baseColors = [
+        "#f94144", "#f3722c", "#f9844a", "#f9c74f",
+        "#90be6d", "#43aa8b", "#577590", "#277da1",
+        "#9b5de5", "#f15bb5", "#fee440", "#00bbf9"
+      ];
+      const shuffled = baseColors.sort(() => 0.5 - Math.random());
+      const generated = [];
+      for (let i = 0; i < count; i++) {
+        generated.push(shuffled[i % shuffled.length]);
+      }
       return generated;
     }
 
