@@ -149,28 +149,17 @@
 
       resultDiv.textContent = `🎉 You won: ${prize}!`;
 
-      // Send to bot
       try {
         if (window.Telegram?.WebApp) {
           Telegram.WebApp.ready();
-          alert("✅ Telegram context detected Prize: " + prize + "User ID: " + JSON.stringify(Telegram.WebApp.initDataUnsafe?.user));
+          alert("✅ Telegram context detected.\nPrize: " + prize +
+                "\nUser ID: " + JSON.stringify(Telegram.WebApp.initDataUnsafe?.user));
           Telegram.WebApp.sendData(prize);
         } else {
-          alert("❌ Telegram.WebApp not available.Platform: " + navigator.platform);
+          alert("❌ Telegram.WebApp not available.\nPlatform: " + navigator.platform);
         }
       } catch (err) {
         alert("🚨 Error sending data: " + err.message);
-      }
-    }!`;
-
-      // Send to bot
-      if (window.Telegram?.WebApp) {
-        Telegram.WebApp.ready();
-        alert("Sending prize: " + prize);
-        alert("Telegram context: " + JSON.stringify(window.Telegram.WebApp.initDataUnsafe, null, 2));
-        Telegram.WebApp.sendData(prize);
-      } else {
-        alert("Telegram.WebApp is not available. You're likely not inside Telegram.");
       }
     }
 
@@ -194,13 +183,7 @@
 
       colors = generateColors(rewards.length);
       drawWheel();
-
-      // ✅ Debug element
-      // const debug = document.createElement("pre");
-      // debug.style.cssText = "background:#fff;color:#000;padding:10px;max-width:90%;overflow:auto;";
-      // debug.innerText = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe ?? "undefined", null, 2);
-      // document.body.appendChild(debug);
-    });`
+    });
   </script>
 </body>
 </html>
