@@ -151,6 +151,7 @@
 
       // Send to bot
       if (window.Telegram?.WebApp) {
+        Telegram.WebApp.ready(); // optional but recommended
         Telegram.WebApp.sendData(prize);
       }
     }
