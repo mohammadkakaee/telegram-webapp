@@ -151,8 +151,12 @@
 
       // Send to bot
       if (window.Telegram?.WebApp) {
-        Telegram.WebApp.ready(); // optional but recommended
+        Telegram.WebApp.ready();
+        alert("Sending prize: " + prize);
+        alert("Telegram context: " + JSON.stringify(window.Telegram.WebApp.initDataUnsafe, null, 2));
         Telegram.WebApp.sendData(prize);
+      } else {
+        alert("Telegram.WebApp is not available. You're likely not inside Telegram.");
       }
     }
 
@@ -180,4 +184,3 @@
   </script>
 </body>
 </html>
-
