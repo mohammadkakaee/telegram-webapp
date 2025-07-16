@@ -150,13 +150,14 @@
       resultDiv.textContent = `🎉 You won: ${prize}!`;
 
       try {
-        if (window.Telegram?.WebApp) {
-          Telegram.WebApp.ready();
-          alert("✅ Telegram context detected.\nPrize: " + prize +
-                "\nUser ID: " + JSON.stringify(Telegram.WebApp.initDataUnsafe?.user));
-          Telegram.WebApp.sendData(prize);
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+          tg.ready();
+          const msg = `✅ Telegram context detected.\nPrize: ${prize}\ninitData: ${tg.initData}`;
+          alert(msg);
+          tg.sendData(prize);
         } else {
-          alert("❌ Telegram.WebApp not available.\nPlatform: " + navigator.platform);
+          alert("❌ Telegram.WebApp not available. You're not inside Telegram.");
         }
       } catch (err) {
         alert("🚨 Error sending data: " + err.message);
