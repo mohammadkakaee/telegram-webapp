@@ -156,7 +156,8 @@
         alert("Telegram context: " + JSON.stringify(window.Telegram.WebApp.initDataUnsafe, null, 2));
         Telegram.WebApp.sendData(prize);
       } else {
-        alert("Telegram.WebApp is not available. You're likely not inside Telegram.");
+        alert("initData: " + window.Telegram?.WebApp?.initData);
+        // alert("Telegram.WebApp is not available. You're likely not inside Telegram.");
       }
     }
 
