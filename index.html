@@ -145,8 +145,14 @@
       const finalDeg = rotation % 360;
       const adjustedDeg = (360 - finalDeg + 90) % 360;
       const index = Math.floor(adjustedDeg / sliceDeg) % rewards.length;
+      const prize = rewards[index];
 
-      resultDiv.textContent = `🎉 You won: ${rewards[index]}!`;
+      resultDiv.textContent = `🎉 You won: ${prize}!`;
+
+      // Send to bot
+      if (window.Telegram?.WebApp) {
+        Telegram.WebApp.sendData(prize);
+      }
     }
 
     spinBtn.addEventListener('click', () => {
