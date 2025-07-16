@@ -180,10 +180,11 @@
       drawWheel();
 
       // ✅ Debug element
-      const debug = document.createElement("pre");
-      debug.style.cssText = "background:#fff;color:#000;padding:10px;max-width:90%;overflow:auto;";
-      debug.innerText = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe ?? "undefined", null, 2);
-      document.body.appendChild(debug);
+      // const debug = document.createElement("pre");
+      // debug.style.cssText = "background:#fff;color:#000;padding:10px;max-width:90%;overflow:auto;";
+      // debug.innerText = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe ?? "undefined", null, 2);
+      // document.body.appendChild(debug);
+      alert("Platform: " + Telegram?.WebApp?.platform);
     });
   </script>
 </body>
