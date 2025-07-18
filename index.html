@@ -136,12 +136,17 @@
 
       resultDiv.textContent = `🎉 You won: ${prize}!`;
 
-      const tg = window.Telegram?.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.sendData(prize);
-      } else {
-        alert("❌ Not inside Telegram WebApp context");
+      try {
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+          alert("✅ Telegram WebApp loaded!");
+          alert("👤 User Info: " + JSON.stringify(tg.initDataUnsafe?.user));
+          tg.sendData(prize);
+        } else {
+          alert("❌ Not inside Telegram WebApp context");
+        }
+      } catch (err) {
+        alert("🚨 Error: " + err.message);
       }
     }
 
