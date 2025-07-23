@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spin & Win</title>
   <style>
     body {
@@ -81,7 +81,6 @@
     let spinning = false;
     let canSpin = true;
     let spinInterval;
-    let telegramReady = false;
 
     function generateColors(count) {
       const baseColors = ["#f94144", "#f3722c", "#f9844a", "#f9c74f", "#90be6d", "#43aa8b", "#577590"];
@@ -138,15 +137,15 @@
 
       try {
         const tg = window.Telegram?.WebApp;
-        if (telegramReady && tg?.initData) {
-          alert("✅ Telegram WebApp context is ready");
+        if (tg) {
+          alert("✅ Telegram WebApp loaded!");
           alert("👤 User Info: " + JSON.stringify(tg.initDataUnsafe?.user));
           tg.sendData(prize);
         } else {
-          alert("❌ Telegram WebApp context is not ready");
+          alert("❌ Not inside Telegram WebApp context");
         }
       } catch (err) {
-        alert("🚨 Error sending prize: " + err.message);
+        alert("🚨 Error: " + err.message);
       }
     }
 
@@ -162,16 +161,11 @@
       colors = generateColors(rewards.length);
       drawWheel();
 
-      // Initialize Telegram WebApp
-      const tg = window.Telegram?.WebApp;
-      if (tg) {
-        tg.ready();
-        telegramReady = true;
-        console.log("Telegram WebApp ready");
-        alert("✅ Telegram WebApp ready\nUser: " + JSON.stringify(tg.initDataUnsafe?.user));
-      } else {
-        alert("❌ Not running inside Telegram WebApp");
-      }
+      // 🔍 Debug Telegram context
+      const isTelegram = !!window.Telegram?.WebApp;
+      const initData = window.Telegram?.WebApp?.initData ?? "undefined";
+      const user = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe?.user ?? {});
+      alert(`🧪 isTelegram: ${isTelegram}\ninitData: ${initData}\nUser: ${user}`);
     });
   </script>
 </body>
