@@ -1,9 +1,8 @@
-<!-- index.html (Deploy this to Vercel) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Spin & Win</title>
   <style>
     body {
@@ -82,6 +81,7 @@
     let spinning = false;
     let canSpin = true;
     let spinInterval;
+    let telegramReady = false;
 
     function generateColors(count) {
       const baseColors = ["#f94144", "#f3722c", "#f9844a", "#f9c74f", "#90be6d", "#43aa8b", "#577590"];
@@ -138,15 +138,15 @@
 
       try {
         const tg = window.Telegram?.WebApp;
-        if (tg) {
-          alert("✅ Telegram WebApp loaded!");
+        if (telegramReady && tg?.initData) {
+          alert("✅ Telegram WebApp context is ready");
           alert("👤 User Info: " + JSON.stringify(tg.initDataUnsafe?.user));
           tg.sendData(prize);
         } else {
-          alert("❌ Not inside Telegram WebApp context");
+          alert("❌ Telegram WebApp context is not ready");
         }
       } catch (err) {
-        alert("🚨 Error: " + err.message);
+        alert("🚨 Error sending prize: " + err.message);
       }
     }
 
@@ -158,9 +158,20 @@
     window.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const raw = urlParams.get("rewards");
-      rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin"];
+      rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
       colors = generateColors(rewards.length);
       drawWheel();
+
+      // Initialize Telegram WebApp
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        tg.ready();
+        telegramReady = true;
+        console.log("Telegram WebApp ready");
+        alert("✅ Telegram WebApp ready\nUser: " + JSON.stringify(tg.initDataUnsafe?.user));
+      } else {
+        alert("❌ Not running inside Telegram WebApp");
+      }
     });
   </script>
 </body>
