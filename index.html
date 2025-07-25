@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spin & Win</title>
+
+  <!-- ✅ REQUIRED for Telegram Mini App -->
+  <script src="https://telegram.org/js/telegram-web-app.js?58"></script>
+
   <style>
     body {
       margin: 0;
@@ -14,23 +18,6 @@
       justify-content: center;
       height: 100vh;
       background: linear-gradient(135deg, #f8d800, #f16a70);
-      overflow: hidden;
-    }
-
-    #loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 100vw;
-      background-color: rgba(255, 255, 255, 0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      z-index: 9999;
     }
 
     #container {
@@ -79,16 +66,32 @@
       font-weight: bold;
       color: white;
     }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.7);
+      width: 100vw;
+      height: 100vh;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
   </style>
 </head>
 <body>
-  <div id="loader">Loading WebApp...</div>
+  <div id="loading">⏳ Initializing Telegram...</div>
 
-  <div id="container" style="display: none;">
+  <div id="container">
     <div id="marker"></div>
     <canvas id="wheel" width="300" height="300"></canvas>
   </div>
-  <button id="spinBtn" style="display: none;">🎰 Spin</button>
+
+  <button id="spinBtn">🎰 Spin</button>
   <div id="result"></div>
 
   <script>
@@ -96,8 +99,7 @@
     const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spinBtn');
     const resultDiv = document.getElementById('result');
-    const container = document.getElementById('container');
-    const loader = document.getElementById('loader');
+    const loading = document.getElementById('loading');
 
     let rewards = [];
     let colors = [];
@@ -164,9 +166,8 @@
       try {
         const tg = window.Telegram?.WebApp;
         if (tg) {
-          alert("✅ Telegram WebApp loaded!");
-          alert("👤 User Info: " + JSON.stringify(tg.initDataUnsafe?.user));
           tg.sendData(prize);
+          alert("✅ Prize sent to bot: " + prize);
         } else {
           alert("❌ Not inside Telegram WebApp context");
         }
@@ -180,40 +181,39 @@
       else stopSpin();
     });
 
-    async function waitForInitData(maxWait = 40000) {
-      const interval = 100;
-      const maxAttempts = Math.floor(maxWait / interval);
-      let attempts = 0;
-
+    async function waitForTelegramInitData(timeout = 4000) {
       return new Promise((resolve, reject) => {
-        const check = () => {
+        const interval = 100;
+        let waited = 0;
+        const check = setInterval(() => {
           const tg = window.Telegram?.WebApp;
-          const initData = tg?.initData;
-          if (tg && initData) return resolve(tg);
-
-          attempts++;
-          if (attempts >= maxAttempts) return reject("⏱ Timeout: Telegram initData not available.");
-          setTimeout(check, interval);
-        };
-        check();
+          if (tg?.initData) {
+            clearInterval(check);
+            resolve(tg);
+          }
+          waited += interval;
+          if (waited >= timeout) {
+            clearInterval(check);
+            reject(new Error("Timeout: Telegram initData not available."));
+          }
+        }, interval);
       });
     }
 
     window.addEventListener("DOMContentLoaded", async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const raw = urlParams.get("rewards");
-      rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
-      colors = generateColors(rewards.length);
-      drawWheel();
-
       try {
-        await waitForInitData();
-        loader.style.display = "none";
-        container.style.display = "block";
-        spinBtn.style.display = "inline-block";
-      } catch (e) {
-        alert(e);
-        loader.textContent = "❌ Failed to load Telegram context.";
+        const tg = await waitForTelegramInitData();
+        loading.remove();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const raw = urlParams.get("rewards");
+        rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
+        colors = generateColors(rewards.length);
+        drawWheel();
+
+        alert(`✅ Telegram WebApp Ready!\nUser: ${JSON.stringify(tg.initDataUnsafe?.user ?? {})}`);
+      } catch (err) {
+        alert("⏱ " + err.message);
       }
     });
   </script>
