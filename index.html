@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spin & Win</title>
-
-  <!-- ✅ REQUIRED for Telegram Mini App -->
   <script src="https://telegram.org/js/telegram-web-app.js?58"></script>
-
   <style>
     body {
       margin: 0;
@@ -19,13 +16,11 @@
       height: 100vh;
       background: linear-gradient(135deg, #f8d800, #f16a70);
     }
-
     #container {
       position: relative;
       width: 300px;
       height: 300px;
     }
-
     canvas {
       background: transparent;
       border-radius: 50%;
@@ -34,7 +29,6 @@
       top: 0;
       left: 0;
     }
-
     #marker {
       position: absolute;
       bottom: -20px;
@@ -47,7 +41,6 @@
       border-bottom: 20px solid #000;
       z-index: 10;
     }
-
     #spinBtn {
       margin-top: 30px;
       padding: 15px 30px;
@@ -59,38 +52,19 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
-
     #result {
       margin-top: 20px;
       font-size: 20px;
       font-weight: bold;
       color: white;
     }
-
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: rgba(0,0,0,0.7);
-      width: 100vw;
-      height: 100vh;
-      color: white;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
   </style>
 </head>
 <body>
-  <div id="loading">⏳ Initializing Telegram...</div>
-
   <div id="container">
     <div id="marker"></div>
     <canvas id="wheel" width="300" height="300"></canvas>
   </div>
-
   <button id="spinBtn">🎰 Spin</button>
   <div id="result"></div>
 
@@ -99,7 +73,6 @@
     const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spinBtn');
     const resultDiv = document.getElementById('result');
-    const loading = document.getElementById('loading');
 
     let rewards = [];
     let colors = [];
@@ -163,16 +136,17 @@
 
       resultDiv.textContent = `🎉 You won: ${prize}!`;
 
+      // ✅ Attempt to send prize
       try {
         const tg = window.Telegram?.WebApp;
-        if (tg) {
+        if (tg?.sendData) {
           tg.sendData(prize);
           alert("✅ Prize sent to bot: " + prize);
         } else {
-          alert("❌ Not inside Telegram WebApp context");
+          alert("❌ Telegram WebApp not available or sendData unsupported.");
         }
       } catch (err) {
-        alert("🚨 Error: " + err.message);
+        alert("🚨 Error sending data:", err);
       }
     }
 
@@ -181,40 +155,18 @@
       else stopSpin();
     });
 
-    async function waitForTelegramInitData(timeout = 4000) {
-      return new Promise((resolve, reject) => {
-        const interval = 100;
-        let waited = 0;
-        const check = setInterval(() => {
-          const tg = window.Telegram?.WebApp;
-          if (tg?.initData) {
-            clearInterval(check);
-            resolve(tg);
-          }
-          waited += interval;
-          if (waited >= timeout) {
-            clearInterval(check);
-            reject(new Error("Timeout: Telegram initData not available."));
-          }
-        }, interval);
-      });
-    }
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const raw = urlParams.get("rewards");
+      rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
+      colors = generateColors(rewards.length);
+      drawWheel();
 
-    window.addEventListener("DOMContentLoaded", async () => {
-      try {
-        const tg = await waitForTelegramInitData();
-        loading.remove();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const raw = urlParams.get("rewards");
-        rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
-        colors = generateColors(rewards.length);
-        drawWheel();
-
-        alert(`✅ Telegram WebApp Ready!\nUser: ${JSON.stringify(tg.initDataUnsafe?.user ?? {})}`);
-      } catch (err) {
-        alert("⏱ " + err.message);
-      }
+      // Debug info
+      const isTelegram = !!window.Telegram?.WebApp;
+      const initData = window.Telegram?.WebApp?.initData ?? "undefined";
+      const user = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe?.user ?? {});
+      alert(`🧪 isTelegram: ${isTelegram}\ninitData: ${initData}\nUser: ${user}`);
     });
   </script>
 </body>
