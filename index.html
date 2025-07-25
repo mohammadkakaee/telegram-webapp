@@ -180,7 +180,7 @@
       else stopSpin();
     });
 
-    async function waitForInitData(maxWait = 4000) {
+    async function waitForInitData(maxWait = 40000) {
       const interval = 100;
       const maxAttempts = Math.floor(maxWait / interval);
       let attempts = 0;
