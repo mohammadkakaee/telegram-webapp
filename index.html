@@ -162,7 +162,7 @@
       colors = generateColors(rewards.length);
       drawWheel();
 
-      // Debug info
+      // Debug info alert
       const isTelegram = !!window.Telegram?.WebApp;
       const initData = window.Telegram?.WebApp?.initData ?? "undefined";
       const user = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe?.user ?? {});
