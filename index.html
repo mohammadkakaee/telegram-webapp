@@ -1,175 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spin & Win</title>
-  <script src="https://telegram.org/js/telegram-web-app.js?58"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #f8d800, #f16a70);
-    }
-    #container {
-      position: relative;
-      width: 300px;
-      height: 300px;
-    }
-    canvas {
-      background: transparent;
-      border-radius: 50%;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    #marker {
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid #000;
-      z-index: 10;
-    }
-    #spinBtn {
-      margin-top: 30px;
-      padding: 15px 30px;
-      font-size: 18px;
-      background-color: #ff4757;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-    }
-  </style>
+  <meta charset="UTF-8">~
+  <title>Happy Islands</title>
 </head>
+
 <body>
-  <div id="container">
-    <div id="marker"></div>
-    <canvas id="wheel" width="300" height="300"></canvas>
-  </div>
-  <button id="spinBtn">🎰 Spin</button>
-  <div id="result"></div>
+<!--  <button id="helloBtn">   &lt;!&ndash;   onclick=alert("common")>   or  onclick="showMessage()">    &ndash;&gt;-->
+<!--    Click Me!-->
+<!--  </button>-->
+<!--  <script src="test.js"></script>-->
 
+
+  <input type="button" value="Click Me!" onclick="showMessage()">   <!--   onclick=alert("common")>   -->
+  <label for="box">Read Here</label>
+  <input type="text" id="box" readonly>
   <script>
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-    const spinBtn = document.getElementById('spinBtn');
-    const resultDiv = document.getElementById('result');
-
-    let rewards = [];
-    let colors = [];
-    let sliceDeg;
-    let angle = 0;
-    let rotation = 0;
-    let spinning = false;
-    let canSpin = true;
-    let spinInterval;
-
-    function generateColors(count) {
-      const baseColors = ["#f94144", "#f3722c", "#f9844a", "#f9c74f", "#90be6d", "#43aa8b", "#577590"];
-      const shuffled = baseColors.sort(() => 0.5 - Math.random());
-      return Array.from({ length: count }, (_, i) => shuffled[i % shuffled.length]);
-    }
-
-    function drawWheel() {
-      angle = 0;
-      sliceDeg = 360 / rewards.length;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < rewards.length; i++) {
-        ctx.beginPath();
-        ctx.fillStyle = colors[i];
-        ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 150, angle * Math.PI/180, (angle + sliceDeg) * Math.PI/180);
-        ctx.lineTo(150, 150);
-        ctx.fill();
-        ctx.save();
-        ctx.translate(150, 150);
-        ctx.rotate((angle + sliceDeg / 2) * Math.PI / 180);
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 14px sans-serif";
-        ctx.fillText(rewards[i], 60, 5);
-        ctx.restore();
-        angle += sliceDeg;
-      }
-    }
-
-    function updateRotation() {
-      rotation = (rotation + 10) % 360;
-      canvas.style.transform = `rotate(${rotation}deg)`;
-    }
-
-    function startSpin() {
-      if (!canSpin) return;
-      spinning = true;
-      spinBtn.textContent = "🛑 Stop";
-      spinInterval = setInterval(updateRotation, 20);
-    }
-
-    function stopSpin() {
-      clearInterval(spinInterval);
-      spinning = false;
-      canSpin = false;
-      spinBtn.disabled = true;
-
-      const finalDeg = rotation % 360;
-      const adjustedDeg = (360 - finalDeg + 90) % 360;
-      const index = Math.floor(adjustedDeg / sliceDeg) % rewards.length;
-      const prize = rewards[index];
-
-      resultDiv.textContent = `🎉 You won: ${prize}!`;
-
-      // ✅ Attempt to send prize
-      try {
-        const tg = window.Telegram?.WebApp;
-        if (tg?.sendData) {
-          tg.sendData(prize);
-          alert("✅ Prize sent to bot: " + prize);
-        } else {
-          alert("❌ Telegram WebApp not available or sendData unsupported.");
-        }
-      } catch (err) {
-        alert("🚨 Error sending data:", err);
-      }
-    }
-
-    spinBtn.addEventListener('click', () => {
-      if (!spinning) startSpin();
-      else stopSpin();
-    });
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const raw = urlParams.get("rewards");
-      rewards = raw ? raw.split(',') : ["Try Again", "1000", "Free Spin", "2000", "Bonus"];
-      colors = generateColors(rewards.length);
-      drawWheel();
-
-      // Debug info alert
-      const isTelegram = !!window.Telegram?.WebApp;
-      const initData = window.Telegram?.WebApp?.initData ?? "undefined";
-      const user = JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe?.user ?? {});
-      alert(`🧪 isTelegram: ${isTelegram}\ninitData: ${initData}\nUser: ${user}`);
-    });
+    function showMessage() {
+    document.getElementById("box").value = "🎉 You clicked the button!";
+  }
   </script>
 </body>
+
 </html>
 
 
