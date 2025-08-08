@@ -1,0 +1,47 @@
+body {
+  background-color: #1a1a2e;
+  font-family: 'Cinzel', serif;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.fantasy-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  color: white;
+}
+
+/* Hover effect */
+.fantasy-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+/* Category Colors */
+.fire {
+  background: linear-gradient(45deg, #ff4e00, #ec9f05);
+}
+
+.water {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+}
+
+.earth {
+  background: linear-gradient(45deg, #6a9113, #141517);
+}
+
+.air {
+  background: linear-gradient(45deg, #89f7fe, #66a6ff);
+  color: black;
+}
+
+.magic {
+  background: linear-gradient(45deg, #8e2de2, #4a00e0);
+}
