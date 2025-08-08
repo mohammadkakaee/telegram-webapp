@@ -11,6 +11,17 @@
 </head>
 
 <body>
+  <!--   reload everytime   -->
+  <script>
+    window.addEventListener("pageshow", function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
+
+
+
   <button id="helloBtn">   <!--   onclick=alert("common")>   or  onclick="showMessage()">    -->
     Click Me!
   </button>
@@ -28,16 +39,6 @@
 
 
   <a href="another.html" class="button-link">Go to Page</a>
-
-
-  <!--   reload everytime   -->
-  <script>
-    window.addEventListener("pageshow", function(event) {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    });
-  </script>
 </body>
 
 </html>
