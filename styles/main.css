@@ -1,9 +1,21 @@
 html, body {
-    height: 100%;
-    min-height: 100%;
-    background: #ffffff;
-    /* background: linear-gradient(135deg, #f8d800, #f16a70); */
-  }
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(circle at 20% 30%, #ffd6c9, transparent 40%),
+              radial-gradient(circle at 80% 20%, #fbe0a0, transparent 40%),
+              radial-gradient(circle at 60% 80%, #c3d9ff, transparent 40%),
+              radial-gradient(circle at 30% 70%, #f8c4ff, transparent 40%);
+  background-blend-mode: screen;
+  background-size: cover;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 equal columns */
+  row-gap: 8px; /* smaller vertical gap */
+  column-gap: 20px; /* keep horizontal gap */
+  justify-items: center; /* center buttons in each column */
+  padding: 10px;
+}
+
+
 #app, #container {
     min-height: 100%;
   }
