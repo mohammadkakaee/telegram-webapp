@@ -1,7 +1,7 @@
 body {
   background: radial-gradient(circle at top left, #f5f5f5, #bcbcbc, #8e8e8e);
   background-size: 400% 400%;
-  animation: silverShimmer 8s ease-in-out infinite;
+  animation: silverShimmer 05s ease-in-out infinite;
   font-family: 'Cinzel', serif;
   text-align: center;
   padding-top: 50px;
