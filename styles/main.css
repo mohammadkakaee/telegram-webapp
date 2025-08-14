@@ -1,12 +1,13 @@
 html, body {
   min-height: 100vh;
-  margin: 0;
+  margin: 00px;
   background: radial-gradient(circle at 20% 30%, #ffd6c9, transparent 40%),
               radial-gradient(circle at 80% 20%, #fbe0a0, transparent 40%),
               radial-gradient(circle at 60% 80%, #c3d9ff, transparent 40%),
               radial-gradient(circle at 30% 70%, #f8c4ff, transparent 40%);
   background-blend-mode: screen;
   background-size: cover;
+
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 equal columns */
   row-gap: 8px; /* smaller vertical gap */
